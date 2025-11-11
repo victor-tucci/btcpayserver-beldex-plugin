@@ -27,11 +27,8 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
 
-    - name: Clean project
-      run: dotnet clean
-
     - name: Build projects
-      run: dotnet build  -c Release --no-restore
+      run: dotnet build -c Release --no-restore
 
     - name: Deterministic build check
       run: |
