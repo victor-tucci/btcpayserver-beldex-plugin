@@ -18,15 +18,17 @@ namespace BTCPayServer.Plugins.Monero.Payments
         public MoneroLikeSpecificBtcPayNetwork Network => _network;
         public JsonSerializer Serializer { get; }
         private readonly MoneroRPCProvider _moneroRpcProvider;
+        private readonly MoneroWalletService _walletService;
 
         public PaymentMethodId PaymentMethodId { get; }
 
-        public MoneroLikePaymentMethodHandler(MoneroLikeSpecificBtcPayNetwork network, MoneroRPCProvider moneroRpcProvider)
+        public MoneroLikePaymentMethodHandler(MoneroLikeSpecificBtcPayNetwork network, MoneroRPCProvider moneroRpcProvider, MoneroWalletService walletService)
         {
             PaymentMethodId = PaymentTypes.CHAIN.GetPaymentMethodId(network.CryptoCode);
             _network = network;
             Serializer = BlobSerializer.CreateSerializer().Serializer;
             _moneroRpcProvider = moneroRpcProvider;
+            _walletService = walletService;
         }
         bool IsReady() => _moneroRpcProvider.IsConfigured(_network.CryptoCode) && _moneroRpcProvider.IsAvailable(_network.CryptoCode);
 
@@ -41,11 +43,14 @@ namespace BTCPayServer.Plugins.Monero.Payments
                 var daemonClient = _moneroRpcProvider.DaemonRpcClients[_network.CryptoCode];
                 try
                 {
+                    var currentWallet = _walletService.GetWalletState()?.ActiveWalletName;
+                    var accountIndex = supportedPaymentMethod.GetAccountIndexForWallet(currentWallet);
+
                     context.State = new Prepare()
                     {
                         GetFeeRate = daemonClient.SendCommandAsync<GetFeeEstimateRequest, GetFeeEstimateResponse>("get_fee_estimate", new GetFeeEstimateRequest()),
-                        ReserveAddress = s => walletClient.SendCommandAsync<CreateAddressRequest, CreateAddressResponse>("create_address", new CreateAddressRequest() { Label = $"btcpay invoice #{s}", AccountIndex = supportedPaymentMethod.AccountIndex }),
-                        AccountIndex = supportedPaymentMethod.AccountIndex
+                        ReserveAddress = s => walletClient.SendCommandAsync<CreateAddressRequest, CreateAddressResponse>("create_address", new CreateAddressRequest() { Label = $"btcpay invoice #{s}", AccountIndex = accountIndex }),
+                        AccountIndex = accountIndex
                     };
                 }
                 catch (Exception ex)

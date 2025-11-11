@@ -8,6 +8,7 @@ using BTCPayServer.Abstractions.Contracts;
 using BTCPayServer.Abstractions.Models;
 using BTCPayServer.Configuration;
 using BTCPayServer.Hosting;
+using BTCPayServer.Logging;
 using BTCPayServer.Payments;
 using BTCPayServer.Plugins.Monero.Configuration;
 using BTCPayServer.Plugins.Monero.Payments;
@@ -59,7 +60,7 @@ public class MoneroPlugin : BaseBTCPayServerPlugin
                 .AddTransactionLinkProvider(pmi, new SimpleTransactionLinkProvider(blockExplorerLink));
 
 
-        services.AddSingleton(provider =>
+        services.AddSingleton<MoneroLikeConfiguration>(provider =>
                 ConfigureMoneroLikeConfiguration(provider));
         services.AddHttpClient("XMRclient")
             .ConfigurePrimaryHttpMessageHandler(provider =>
@@ -78,6 +79,9 @@ public class MoneroPlugin : BaseBTCPayServerPlugin
         services.AddSingleton<MoneroRPCProvider>();
         services.AddHostedService<MoneroLikeSummaryUpdaterHostedService>();
         services.AddHostedService<MoneroListener>();
+        services.AddHostedService<MoneroConfigurationMigrationService>();
+        services.AddSingleton<MoneroWalletService>();
+        services.AddHostedService(provider => provider.GetRequiredService<MoneroWalletService>());
         services.AddSingleton(provider =>
                 (IPaymentMethodHandler)ActivatorUtilities.CreateInstance(provider, typeof(MoneroLikePaymentMethodHandler), network));
         services.AddSingleton(provider =>
@@ -134,17 +138,17 @@ public class MoneroPlugin : BaseBTCPayServerPlugin
                     $"{moneroLikeSpecificBtcPayNetwork.CryptoCode}_daemon_password", null);
             if (daemonUri == null || walletDaemonUri == null)
             {
-                var logger = serviceProvider.GetRequiredService<ILogger<MoneroPlugin>>();
+                var logs = serviceProvider.GetRequiredService<Logs>();
                 var cryptoCode = moneroLikeSpecificBtcPayNetwork.CryptoCode.ToUpperInvariant();
                 if (daemonUri is null)
                 {
-                    logger.LogWarning($"BTCPAY_{cryptoCode}_DAEMON_URI is not configured");
+                    logs.Configuration.LogWarning($"BTCPAY_{cryptoCode}_DAEMON_URI is not configured");
                 }
                 if (walletDaemonUri is null)
                 {
-                    logger.LogWarning($"BTCPAY_{cryptoCode}_WALLET_DAEMON_URI is not configured");
+                    logs.Configuration.LogWarning($"BTCPAY_{cryptoCode}_WALLET_DAEMON_URI is not configured");
                 }
-                logger.LogWarning($"{cryptoCode} got disabled as it is not fully configured.");
+                logs.Configuration.LogWarning($"{cryptoCode} got disabled as it is not fully configured.");
             }
             else
             {
