@@ -31,13 +31,22 @@ Configure this plugin using the following environment variables:
 
 BTCPay Server's Docker deployment simplifies the setup by automatically configuring these variables. For further details, refer to this [blog post](https://sethforprivacy.com/guides/accepting-monero-via-btcpay-server).
 
+# Documentation
+
+## For Developers and Contributors
+
+📚 **Comprehensive developer documentation is available:**
+
+- **[DEVELOPMENT.md](DEVELOPMENT.md)** - Complete development guide covering setup, workflow, testing, and debugging
+- **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** - Detailed system architecture and component documentation
+- **[docs/RPC.md](docs/RPC.md)** - Monero RPC integration and API reference
+- **[docs/PAYMENT_FLOW.md](docs/PAYMENT_FLOW.md)** - Payment processing flow and lifecycle
+
 # For maintainers
 
-## Building and testing
+## Quick Start
 
-## Local Development Setup
-If you're contributing to this plugin or running a local development instance of BTCPay Server with the Monero plugin, follow these steps.
-## 1. Requirements
+### 1. Requirements
 
 - .NET 8.0 SDK or later
 - JetBrains Rider (recommended) or Visual Studio Code with C# support
