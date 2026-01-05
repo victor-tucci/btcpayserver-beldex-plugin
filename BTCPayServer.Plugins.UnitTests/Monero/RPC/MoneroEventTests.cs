@@ -23,16 +23,16 @@ namespace BTCPayServer.Plugins.UnitTests.Monero.RPC
             {
                 BlockHash = "block123",
                 TransactionHash = "tx456",
-                CryptoCode = "XMR"
+                CryptoCode = "BDX"
             };
 
             Assert.Equal("block123", moneroEvent.BlockHash);
             Assert.Equal("tx456", moneroEvent.TransactionHash);
-            Assert.Equal("XMR", moneroEvent.CryptoCode);
+            Assert.Equal("BDX", moneroEvent.CryptoCode);
         }
 
         [Theory]
-        [InlineData("block123", "tx456", "XMR", "XMR: Tx Update New Block (tx456block123)")]
+        [InlineData("block123", "tx456", "BDX", "BDX: Tx Update New Block (tx456block123)")]
         public void ToString_ShouldReturnCorrectString(string blockHash, string transactionHash, string cryptoCode, string expected)
         {
             var moneroEvent = new MoneroEvent

@@ -27,19 +27,19 @@ public class MoneroPluginIntegrationTest(ITestOutputHelper helper) : MoneroAndBi
             var coinAverageMock = new MockRateProvider();
             coinAverageMock.ExchangeRates.Add(new PairRate(CurrencyPair.Parse("BTC_USD"), new BidAsk(5000m)));
             coinAverageMock.ExchangeRates.Add(new PairRate(CurrencyPair.Parse("BTC_EUR"), new BidAsk(4000m)));
-            coinAverageMock.ExchangeRates.Add(new PairRate(CurrencyPair.Parse("XMR_BTC"), new BidAsk(4500m)));
+            coinAverageMock.ExchangeRates.Add(new PairRate(CurrencyPair.Parse("BDX_BTC"), new BidAsk(4500m)));
             rateProviderFactory.Providers.Add("coingecko", coinAverageMock);
 
             var kraken = new MockRateProvider();
             kraken.ExchangeRates.Add(new PairRate(CurrencyPair.Parse("BTC_USD"), new BidAsk(0.1m)));
-            kraken.ExchangeRates.Add(new PairRate(CurrencyPair.Parse("XMR_USD"), new BidAsk(0.1m)));
-            kraken.ExchangeRates.Add(new PairRate(CurrencyPair.Parse("XMR_BTC"), new BidAsk(0.1m)));
+            kraken.ExchangeRates.Add(new PairRate(CurrencyPair.Parse("BDX_USD"), new BidAsk(0.1m)));
+            kraken.ExchangeRates.Add(new PairRate(CurrencyPair.Parse("BDX_BTC"), new BidAsk(0.1m)));
             rateProviderFactory.Providers.Add("kraken", kraken);
         }
 
         await s.RegisterNewUser(true);
         await s.CreateNewStore(preferredExchange: "Kraken");
-        await s.Page.Locator("a.nav-link[href*='monerolike/XMR']").ClickAsync();
+        await s.Page.Locator("a.nav-link[href*='monerolike/BDX']").ClickAsync();
         await s.Page.Locator("input#PrimaryAddress")
             .FillAsync(
                 "43Pnj6ZKGFTJhaLhiecSFfLfr64KPJZw7MyGH73T6PTDekBBvsTAaWEUSM4bmJqDuYLizhA13jQkMRPpz9VXBCBqQQb6y5L");
@@ -59,7 +59,7 @@ public class MoneroPluginIntegrationTest(ITestOutputHelper helper) : MoneroAndBi
         // Set rate provider
         await s.Page.Locator("#menu-item-General").ClickAsync();
         await s.Page.Locator("#menu-item-Rates").ClickAsync();
-        await s.Page.FillAsync("#DefaultCurrencyPairs", "BTC_USD,XMR_USD,XMR_BTC");
+        await s.Page.FillAsync("#DefaultCurrencyPairs", "BTC_USD,BDX_USD,BDX_BTC");
         await s.Page.SelectOptionAsync("#PrimarySource_PreferredExchange", "kraken");
         await s.Page.Locator("#page-primary").ClickAsync();
 
@@ -84,19 +84,19 @@ public class MoneroPluginIntegrationTest(ITestOutputHelper helper) : MoneroAndBi
         Assert.Equal("$4.20", totalFiat);
 
         await s.Page.GoBackAsync();
-        await s.Page.Locator("a.nav-link[href*='monerolike/XMR']").ClickAsync();
+        await s.Page.Locator("a.nav-link[href*='monerolike/BDX']").ClickAsync();
 
         // Create a new account label
         await s.Page.FillAsync("#NewAccountLabel", "tst-account");
         await s.Page.ClickAsync("button[name='command'][value='add-account']");
 
         // Select primary Account Index
-        await s.Page.Locator("a.nav-link[href*='monerolike/XMR']").ClickAsync();
+        await s.Page.Locator("a.nav-link[href*='monerolike/BDX']").ClickAsync();
         await s.Page.SelectOptionAsync("#AccountIndex", "1");
         await s.Page.ClickAsync("#SaveButton");
 
         // Verify selected account index
-        await s.Page.Locator("a.nav-link[href*='monerolike/XMR']").ClickAsync();
+        await s.Page.Locator("a.nav-link[href*='monerolike/BDX']").ClickAsync();
         var selectedValue = await s.Page.Locator("#AccountIndex").InputValueAsync();
         Assert.Equal("1", selectedValue);
 
@@ -115,7 +115,7 @@ public class MoneroPluginIntegrationTest(ITestOutputHelper helper) : MoneroAndBi
 
         await s.RegisterNewUser(true);
         await s.CreateNewStore();
-        await s.Page.Locator("a.nav-link[href*='monerolike/XMR']").ClickAsync();
+        await s.Page.Locator("a.nav-link[href*='monerolike/BDX']").ClickAsync();
         await s.Page.Locator("input#PrimaryAddress")
             .FillAsync("wrongprimaryaddressfSF6ZKGFT7MyGH73T6PTDekBBvsTAaWEUSM4bmJqDuYLizhA13jQkMRPpz9VXBCBqQQb6y5L");
         await s.Page.Locator("input#PrivateViewKey")
@@ -135,10 +135,10 @@ public class MoneroPluginIntegrationTest(ITestOutputHelper helper) : MoneroAndBi
     private static async Task CleanUp(PlaywrightTester playwrightTester)
     {
         MoneroRPCProvider moneroRpcProvider = playwrightTester.Server.PayTester.GetService<MoneroRPCProvider>();
-        if (moneroRpcProvider.IsAvailable("XMR"))
+        if (moneroRpcProvider.IsAvailable("BDX"))
         {
-            await moneroRpcProvider.CloseWallet("XMR");
-            await moneroRpcProvider.UpdateSummary("XMR");
+            await moneroRpcProvider.CloseWallet("BDX");
+            await moneroRpcProvider.UpdateSummary("BDX");
         }
 
         if (playwrightTester.Server.PayTester.InContainer)
@@ -158,7 +158,7 @@ public class MoneroPluginIntegrationTest(ITestOutputHelper helper) : MoneroAndBi
             var removeWalletFromDocker = new ProcessStartInfo
             {
                 FileName = "docker",
-                Arguments = "exec xmr_wallet sh -c \"rm -rf /wallet/*\"",
+                Arguments = "exec bdx_wallet sh -c \"rm -rf /wallet/*\"",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true
             };

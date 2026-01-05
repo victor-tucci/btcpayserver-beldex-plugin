@@ -50,11 +50,11 @@ namespace BTCPayServer.Plugins.UnitTests.Monero.Configuration
                 Password = "password"
             };
 
-            config.MoneroLikeConfigurationItems.Add("XMR", configItem);
+            config.MoneroLikeConfigurationItems.Add("BDX", configItem);
 
             Assert.Single(config.MoneroLikeConfigurationItems);
-            Assert.True(config.MoneroLikeConfigurationItems.ContainsKey("XMR"));
-            Assert.Equal(configItem, config.MoneroLikeConfigurationItems["XMR"]);
+            Assert.True(config.MoneroLikeConfigurationItems.ContainsKey("BDX"));
+            Assert.Equal(configItem, config.MoneroLikeConfigurationItems["BDX"]);
         }
 
         [Trait("Category", "Unit")]
@@ -71,10 +71,10 @@ namespace BTCPayServer.Plugins.UnitTests.Monero.Configuration
                 DaemonRpcUri = new Uri("http://localhost:18082")
             };
 
-            config.MoneroLikeConfigurationItems.Add("XMR", configItem1);
+            config.MoneroLikeConfigurationItems.Add("BDX", configItem1);
 
             Assert.Throws<ArgumentException>(() =>
-                config.MoneroLikeConfigurationItems.Add("XMR", configItem2));
+                config.MoneroLikeConfigurationItems.Add("BDX", configItem2));
         }
     }
 }

@@ -60,7 +60,7 @@ namespace BTCPayServer.Plugins.Monero.Payments
         {
             if (!_moneroRpcProvider.IsConfigured(_network.CryptoCode))
             {
-                throw new PaymentMethodUnavailableException($"BTCPAY_XMR_WALLET_DAEMON_URI or BTCPAY_XMR_DAEMON_URI isn't configured");
+                throw new PaymentMethodUnavailableException($"BTCPAY_BDX_WALLET_DAEMON_URI or BTCPAY_BDX_DAEMON_URI isn't configured");
             }
 
             if (!_moneroRpcProvider.IsAvailable(_network.CryptoCode) || context.State is not Prepare moneroPrepare)

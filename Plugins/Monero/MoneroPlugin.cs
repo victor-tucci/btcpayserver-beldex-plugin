@@ -39,21 +39,21 @@ public class MoneroPlugin : BaseBTCPayServerPlugin
 
         var network = new MoneroLikeSpecificBtcPayNetwork()
         {
-            CryptoCode = "XMR",
-            DisplayName = "Monero",
-            Divisibility = 12,
+            CryptoCode = "BDX",
+            DisplayName = "Beldex",
+            Divisibility = 9,
             DefaultRateRules = new[]
             {
-                    "XMR_X = XMR_BTC * BTC_X",
-                    "XMR_BTC = kraken(XMR_BTC)"
+                    "BDX_X = BDX_BTC * BTC_X",
+                    "BDX_BTC = kraken(BDX_BTC)"
                 },
             CryptoImagePath = "monero.svg",
             UriScheme = "monero"
         };
         var blockExplorerLink = chainName == ChainName.Mainnet
-                    ? "https://www.exploremonero.com/transaction/{0}"
-                    : "https://testnet.xmrchain.net/tx/{0}";
-        var pmi = PaymentTypes.CHAIN.GetPaymentMethodId("XMR");
+                    ? "https://www.explorer.beldex.io/transaction/{0}"
+                    : "https://testnet.beldex.dev/tx/{0}";
+        var pmi = PaymentTypes.CHAIN.GetPaymentMethodId("BDX");
         services.AddDefaultPrettyName(pmi, network.DisplayName);
         services.AddBTCPayNetwork(network)
                 .AddTransactionLinkProvider(pmi, new SimpleTransactionLinkProvider(blockExplorerLink));
@@ -61,17 +61,17 @@ public class MoneroPlugin : BaseBTCPayServerPlugin
 
         services.AddSingleton(provider =>
                 ConfigureMoneroLikeConfiguration(provider));
-        services.AddHttpClient("XMRclient")
+        services.AddHttpClient("BDXclient")
             .ConfigurePrimaryHttpMessageHandler(provider =>
             {
                 var configuration = provider.GetRequiredService<MoneroLikeConfiguration>();
-                if (!configuration.MoneroLikeConfigurationItems.TryGetValue("XMR", out var xmrConfig) || xmrConfig.Username is null || xmrConfig.Password is null)
+                if (!configuration.MoneroLikeConfigurationItems.TryGetValue("BDX", out var bdxConfig) || bdxConfig.Username is null || bdxConfig.Password is null)
                 {
                     return new HttpClientHandler();
                 }
                 return new HttpClientHandler
                 {
-                    Credentials = new NetworkCredential(xmrConfig.Username, xmrConfig.Password),
+                    Credentials = new NetworkCredential(bdxConfig.Username, bdxConfig.Password),
                     PreAuthenticate = true
                 };
             });

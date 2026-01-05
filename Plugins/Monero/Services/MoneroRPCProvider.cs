@@ -71,15 +71,15 @@ namespace BTCPayServer.Plugins.Monero.Services
 
         public void DeleteWallet()
         {
-            if (!_moneroLikeConfiguration.MoneroLikeConfigurationItems.TryGetValue("XMR", out var configItem))
+            if (!_moneroLikeConfiguration.MoneroLikeConfigurationItems.TryGetValue("BDX", out var configItem))
             {
-                _logger.LogWarning("DeleteWallet: No XMR configuration found.");
+                _logger.LogWarning("DeleteWallet: No BDX configuration found.");
                 return;
             }
 
             if (string.IsNullOrEmpty(configItem.WalletDirectory))
             {
-                _logger.LogWarning("DeleteWallet: WalletDirectory is null or empty for XMR configuration.");
+                _logger.LogWarning("DeleteWallet: WalletDirectory is null or empty for BDX configuration.");
                 return;
             }
             try

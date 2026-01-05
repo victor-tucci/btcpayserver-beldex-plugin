@@ -13,15 +13,15 @@ namespace BTCPayServer.Plugins.UnitTests.Monero.ViewModels
         {
             var viewModel = new MoneroPaymentViewModel();
 
-            var paymentMethodId = new PaymentMethodId("XMR");
+            var paymentMethodId = new PaymentMethodId("BDX");
 
             var confirmations = "3";
             var depositAddress = "moneroaddress";
             var amount = "100.5";
             var transactionId = "tx123";
             var receivedTime = DateTimeOffset.UtcNow;
-            var transactionLink = "https://explorer.monero.com/tx/tx123";
-            var currency = "XMR";
+            var transactionLink = "https://explorer.beldex.io/tx/tx123";
+            var currency = "BDX";
 
             viewModel.PaymentMethodId = paymentMethodId;
             viewModel.Confirmations = confirmations;

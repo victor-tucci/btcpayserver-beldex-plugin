@@ -6,15 +6,15 @@ namespace BTCPayServer.Plugins.Monero.Utils
     {
         public static decimal Convert(long piconero)
         {
-            var amt = piconero.ToString(CultureInfo.InvariantCulture).PadLeft(12, '0');
-            amt = amt.Length == 12 ? $"0.{amt}" : amt.Insert(amt.Length - 12, ".");
+            var amt = piconero.ToString(CultureInfo.InvariantCulture).PadLeft(9, '0');
+            amt = amt.Length == 9 ? $"0.{amt}" : amt.Insert(amt.Length - 9, ".");
 
             return decimal.Parse(amt, CultureInfo.InvariantCulture);
         }
 
-        public static long Convert(decimal monero)
+        public static long Convert(decimal beldex)
         {
-            return System.Convert.ToInt64(monero * 1000000000000);
+            return System.Convert.ToInt64(beldex * 1000000000);
         }
     }
 }

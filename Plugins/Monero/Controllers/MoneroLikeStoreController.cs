@@ -195,7 +195,7 @@ namespace BTCPayServer.Plugins.Monero.Controllers
                 }
                 if (configurationItem.WalletDirectory == null)
                 {
-                    ModelState.AddModelError(nameof(viewModel.PrimaryAddress), StringLocalizer["This installation doesn't support wallet creation (BTCPAY_XMR_WALLET_DAEMON_WALLETDIR is not set)"]);
+                    ModelState.AddModelError(nameof(viewModel.PrimaryAddress), StringLocalizer["This installation doesn't support wallet creation (BTCPAY_BDX_WALLET_DAEMON_WALLETDIR is not set)"]);
                     valid = false;
                 }
                 if (valid)
