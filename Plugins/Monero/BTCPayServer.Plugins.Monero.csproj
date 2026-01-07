@@ -75,6 +75,6 @@
     <ProjectReference Include="..\..\submodules\btcpayserver\BTCPayServer\BTCPayServer.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="monero.svg" />
+    <EmbeddedResource Include="beldex.svg" />
   </ItemGroup>
 </Project>

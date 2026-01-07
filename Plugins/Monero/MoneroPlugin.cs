@@ -44,14 +44,15 @@ public class MoneroPlugin : BaseBTCPayServerPlugin
             Divisibility = 9,
             DefaultRateRules = new[]
             {
-                    "BDX_X = BDX_BTC * BTC_X",
-                    "BDX_BTC = kraken(BDX_BTC)"
+                    "BDX_X   = BDX_BTC * BTC_X",
+                    "BDX_BTC = hitbtc(BDX_BTC)",
+                    "BTC_X   = kraken(BTC_X)"
                 },
-            CryptoImagePath = "monero.svg",
-            UriScheme = "monero"
+            CryptoImagePath = "beldex.svg",
+            UriScheme = "beldex"
         };
         var blockExplorerLink = chainName == ChainName.Mainnet
-                    ? "https://www.explorer.beldex.io/transaction/{0}"
+                    ? "https://explorer.beldex.io/tx/{0}"
                     : "https://testnet.beldex.dev/tx/{0}";
         var pmi = PaymentTypes.CHAIN.GetPaymentMethodId("BDX");
         services.AddDefaultPrettyName(pmi, network.DisplayName);

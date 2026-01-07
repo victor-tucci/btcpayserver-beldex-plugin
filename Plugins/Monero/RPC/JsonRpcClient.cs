@@ -49,6 +49,10 @@ namespace BTCPayServer.Plugins.Monero.RPC
             HttpResponseMessage rawResult = await _httpClient.SendAsync(httpRequest, cts);
             rawResult.EnsureSuccessStatusCode();
             var rawJson = await rawResult.Content.ReadAsStringAsync();
+            Console.WriteLine(_address);
+            Console.WriteLine(method);
+            Console.WriteLine(data != null ? JsonConvert.SerializeObject(data, jsonSerializer) : "no params");
+            Console.WriteLine(rawJson);
 
             JsonRpcResult<TResponse> response;
             try

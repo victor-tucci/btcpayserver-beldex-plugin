@@ -69,10 +69,10 @@ namespace BTCPayServer.Plugins.Monero.Payments
             }
 
             var invoice = context.InvoiceEntity;
-            var feeRatePerKb = await moneroPrepare.GetFeeRate;
+            var feeRate = await moneroPrepare.GetFeeRate;
             var address = await moneroPrepare.ReserveAddress(invoice.Id);
 
-            var feeRatePerByte = feeRatePerKb.Fee / 1024;
+            var feeRatePerByte = feeRate.FeePerByte;
             var details = new MoneroLikeOnChainPaymentMethodDetails()
             {
                 AccountIndex = moneroPrepare.AccountIndex,
