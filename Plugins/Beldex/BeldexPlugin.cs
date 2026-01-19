@@ -41,7 +41,7 @@ public class BeldexPlugin : BaseBTCPayServerPlugin
         {
             CryptoCode = "BDX",
             DisplayName = "Beldex",
-            Divisibility = 9,
+            Divisibility = 5,   // Beldex has 9 decimal places but Beldex wallets generally use 5 decimal places
             DefaultRateRules = new[]
             {
                     "BDX_X   = BDX_BTC * BTC_X",
