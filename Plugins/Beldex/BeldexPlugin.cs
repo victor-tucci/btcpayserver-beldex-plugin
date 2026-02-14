@@ -79,9 +79,10 @@ public class BeldexPlugin : BaseBTCPayServerPlugin
                     PreAuthenticate = true
                 };
             });
-        services.AddSingleton<BeldexRPCProvider>();
+        services.AddSingleton<BeldexRpcProvider>();
         services.AddHostedService<BeldexLikeSummaryUpdaterHostedService>();
         services.AddHostedService<BeldexListener>();
+        services.AddHostedService<BeldexLoadUpService>();
         services.AddSingleton(provider =>
                 (IPaymentMethodHandler)ActivatorUtilities.CreateInstance(provider, typeof(BeldexLikePaymentMethodHandler), network));
         services.AddSingleton(provider =>
